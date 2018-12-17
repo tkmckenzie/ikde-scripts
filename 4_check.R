@@ -1,8 +1,8 @@
-setwd("~/git/snfa-scripts")
-devtools::check("../snfa")
+setwd("~/git/ikde-scripts")
+devtools::check("../ikde")
 
-# setwd("~/git/snfa")
+# setwd("~/git/ikde")
 # usethis::use_travis()
 
-setwd("~/git/snfa-scripts")
-system("R CMD check --as-cran snfa_0.0.1.tar.gz")
+setwd("~/git/ikde-scripts")
+system("R CMD check --as-ikde ikde_0.0.1.tar.gz")

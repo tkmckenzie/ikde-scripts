@@ -1,4 +1,4 @@
-setwd("~/git/snfa-scripts")
+setwd("~/git/ikde-scripts")
 
-devtools::build("../snfa", ".")
-system("R CMD Rd2pdf ../snfa --force --output=snfa.pdf --no-preview .")
+devtools::build("../ikde", ".")
+system("R CMD Rd2pdf ../ikde --force --output=ikde.pdf --no-preview .")

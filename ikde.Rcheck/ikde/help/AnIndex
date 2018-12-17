@@ -1,0 +1,15 @@
+%stan*%	stan.multiply
+build.model	build.model
+create.restricted.models	create.restricted.models
+define.model	define.model
+evaluate.expression	evaluate.expression
+evaluate.likelihood	evaluate.likelihood
+evaluate.marginal.likelihood	evaluate.marginal.likelihood
+evaluate.posterior	evaluate.posterior
+evaluate.priors	evaluate.priors
+evaluate.statement	evaluate.statement
+fit.model	fit.model
+lm.generated	lm.generated
+prostatic.nodes	prostatic.nodes
+stan.dist.to.r.dist	stan.dist.to.r.dist
+stan.operator.to.r.operator	stan.operator.to.r.operator
