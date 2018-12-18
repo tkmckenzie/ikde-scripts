@@ -22,21 +22,20 @@
 #'              X = list("matrix[N, k]", X),
 #'              y = list("vector[N]", y))
 #' parameters <- list(beta = "vector[k]",
-#'                    sigma = "real<lower=0>")
+#'                    sigma_sq = "real<lower=0>")
 #' model <- list(priors = c("beta ~ normal(0, 10)",
-#'                          "sigma ~ inv_gamma(1, 1)"),
-#'               likelihood = c("y ~ normal(X * beta, sigma)"))
+#'                          "sigma_sq ~ inv_gamma(1, 1)"),
+#'               likelihood = c("y ~ normal(X * beta, sqrt(sigma_sq))"))
 #' 
 #' ikde.model <- define.model(data, parameters, model)
-#' ikde.model <- build.model(ikde.model)
 #' 
 #' statement <- ikde.model$model$likelihood[1]
-#' eval.point <- list(beta = c(1, 2, 3, 4), sigma = 5)
+#' eval.point <- list(beta = c(1, 2, 3, 4), sigma_sq = 5)
 #' 
 #' # These results match:
 #' evaluate.statement(statement, ikde.model, eval.point)
-#' sum(dnorm(y, mean = X %*% eval.point$beta, sd = eval.point$sigma, log = TRUE))
-#' # [1] -1054.093
+#' sum(dnorm(y, mean = X %*% eval.point$beta, sd = sqrt(eval.point$sigma_sq), log = TRUE))
+#' # [1] -4178.641
 #'   
 #' @export
 
@@ -45,7 +44,6 @@ evaluate.statement <-
     if (class(statement) != "character") stop("statement must be a string.")
     if (length(statement) > 1) stop("statement must only contain one element.")
     if (class(ikde.model) != "ikde.model") stop("ikde.model must be of class \"ikde.model\".")
-    if (!ikde.model$built) stop("ikde.model must be built before fitting.")
     if (class(eval.point) != "list") stop("eval.point must be a list.")
     
     #Clean statement and extract left- and right-hand sides
@@ -62,7 +60,7 @@ evaluate.statement <-
     }
     
     #Extract distribution and map to R function
-    distribution.stan <- gsub("\\([0-9A-Za-z\\.,\\*/\\+-\\^_]+\\)$", "", rhs)
+    distribution.stan <- gsub("\\([0-9A-Za-z\\.,\\*/\\+-\\^_\\(\\)]+\\)$", "", rhs)
     
     if (!(distribution.stan %in% names(stan.dist.to.r.dist))) stop(paste0(distribution.stan, " distribution not currently supported."))
     distribution.r <- stan.dist.to.r.dist[[distribution.stan]]$distribution.r
@@ -83,11 +81,6 @@ evaluate.statement <-
     names(args) <- arg.names
     
     #Evaluate lhs
-    #I think there's an issue here
-    #If lhs contains a variable that is not globally defined (e.g., eval.point), evaluate.expression attempts to
-    #  evaluate in parent.frame (i.e., in evaluate.expression env). So, additional arguments need to be passed to
-    #  evaluate.expression as they are needed. 
-    #  OR need to pass correct environment to eval.
     args$x <- evaluate.expression(lhs, ikde.model = ikde.model, eval.point = eval.point)
     
     #Additional arguments to distribution.r

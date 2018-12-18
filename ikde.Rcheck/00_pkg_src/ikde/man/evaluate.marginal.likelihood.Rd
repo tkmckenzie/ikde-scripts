@@ -10,6 +10,18 @@ evaluate.marginal.likelihood(ikde.model, burn.iter = 1000,
 }
 \arguments{
 \item{ikde.model}{An object of class ikde.model, does not necessarily have to be built}
+
+\item{burn.iter}{Number of warmup iterations}
+
+\item{sample.iter}{Number of sampling iterations}
+
+\item{control}{Control parameters used in the Markov chain. See ?rstan::stan for details.}
+
+\item{refresh}{How frequently should progress be reported, in numbers of iterations}
+
+\item{display.output}{Boolean indicating whether output from rstan::stan should be printed}
+
+\item{show.trace}{Boolean indicating whether to show trace plots}
 }
 \value{
 A real number indicating value of the log-marginal-likelihood  at the posterior mean
@@ -22,6 +34,7 @@ Uses evaluate.likelihood, evaluate.priors, and evaluate.posterior to form an est
 marginal likelihood at the posterior mean.
 }
 \examples{
+\donttest{
 data(lm.generated)
 
 X <- lm.generated$X
@@ -32,14 +45,16 @@ data <- list(N = list("int<lower=1>", nrow(X)),
              X = list("matrix[N, k]", X),
              y = list("vector[N]", y))
 parameters <- list(beta = "vector[k]",
-                   sigma = "real<lower=0>")
+                   sigma_sq = "real<lower=0>")
 model <- list(priors = c("beta ~ normal(0, 10)",
-                         "sigma ~ inv_gamma(1, 1)"),
-              likelihood = c("y ~ normal(X * beta, sigma)"))
+                         "sigma_sq ~ inv_gamma(1, 1)"),
+              likelihood = c("y ~ normal(X * beta, sqrt(sigma_sq))"))
 
 ikde.model <- define.model(data, parameters, model)
 
-evaluate.marginal.likelihood(ikde.model) # Only an estimation, may not exactly match presented result
-# [1] -368.3207
-  
+# Only an estimation, may not exactly match presented result
+evaluate.marginal.likelihood(ikde.model)
+# [1] -388.9264
+}
+
 }

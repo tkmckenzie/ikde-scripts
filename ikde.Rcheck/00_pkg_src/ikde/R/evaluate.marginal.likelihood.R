@@ -3,6 +3,12 @@
 #' Evaluates marginal likelihood of Stan model at the posterior mean
 #' 
 #' @param ikde.model An object of class ikde.model, does not necessarily have to be built
+#' @param burn.iter Number of warmup iterations
+#' @param sample.iter Number of sampling iterations
+#' @param control Control parameters used in the Markov chain. See ?rstan::stan for details.
+#' @param refresh How frequently should progress be reported, in numbers of iterations
+#' @param display.output Boolean indicating whether output from rstan::stan should be printed
+#' @param show.trace Boolean indicating whether to show trace plots
 #' 
 #' @return A real number indicating value of the log-marginal-likelihood  at the posterior mean
 #' 
@@ -11,6 +17,7 @@
 #' marginal likelihood at the posterior mean.
 #' 
 #' @examples
+#' \donttest{
 #' data(lm.generated)
 #' 
 #' X <- lm.generated$X
@@ -21,16 +28,18 @@
 #'              X = list("matrix[N, k]", X),
 #'              y = list("vector[N]", y))
 #' parameters <- list(beta = "vector[k]",
-#'                    sigma = "real<lower=0>")
+#'                    sigma_sq = "real<lower=0>")
 #' model <- list(priors = c("beta ~ normal(0, 10)",
-#'                          "sigma ~ inv_gamma(1, 1)"),
-#'               likelihood = c("y ~ normal(X * beta, sigma)"))
+#'                          "sigma_sq ~ inv_gamma(1, 1)"),
+#'               likelihood = c("y ~ normal(X * beta, sqrt(sigma_sq))"))
 #' 
 #' ikde.model <- define.model(data, parameters, model)
 #' 
-#' evaluate.marginal.likelihood(ikde.model) # Only an estimation, may not exactly match presented result
-#' # [1] -368.3207
-#'   
+#' # Only an estimation, may not exactly match presented result
+#' evaluate.marginal.likelihood(ikde.model)
+#' # [1] -388.9264
+#' }
+#'
 #' @export
 
 evaluate.marginal.likelihood <-

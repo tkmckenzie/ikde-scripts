@@ -11,6 +11,7 @@ evaluate.posterior      Stan model posterior evaluation
 evaluate.priors         Stan model prior evaluation
 evaluate.statement      Evaluate sampling statement from Stan program
 fit.model               Fits Stan model
+gibbs.lm                Linear model Gibbs sampling
 lm.generated            Randomly generated multivariate linear model
                         data
 prostatic.nodes         Prostatic nodal development data

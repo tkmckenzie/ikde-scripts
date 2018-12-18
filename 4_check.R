@@ -5,4 +5,4 @@ devtools::check("../ikde")
 # usethis::use_travis()
 
 setwd("~/git/ikde-scripts")
-system("R CMD check --as-ikde ikde_0.0.1.tar.gz")
+system("R CMD check --as-cran ikde_0.0.1.tar.gz")

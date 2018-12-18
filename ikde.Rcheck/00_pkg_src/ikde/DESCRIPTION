@@ -10,7 +10,7 @@ Description: Estimation of model marginal likelihoods for Bayesian model selecti
     marginal likelihood of those models.
 Maintainer: Taylor McKenzie <tkmckenzie@gmail.com>
 Depends: R (>= 3.5.0), rstan
-Imports: invgamma, mvtnorm, quantreg
+Imports: invgamma, methods, mvtnorm, quantreg, stats
 Suggests: ggplot2 (>= 3.1.0), knitr (>= 1.20), Rdpack (>= 0.10.1),
         rmarkdown (>= 1.10)
 VignetteBuilder: knitr
@@ -20,5 +20,5 @@ LazyData: true
 RoxygenNote: 6.1.1
 RdMacros: Rdpack
 NeedsCompilation: no
-Packaged: 2018-12-15 05:03:22 UTC; tkmckenzie
+Packaged: 2018-12-18 20:34:22 UTC; tmcken
 Author: Taylor McKenzie [aut, cre]
