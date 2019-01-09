@@ -11,10 +11,18 @@ data = list(N = list(type = "int<lower=1>", dim = 1, value = nrow(X)),
             k = list(type = "int<lower=1>", dim = 1, value = ncol(X)),
             X = list(type = "matrix", dim = "[N, k]", value = X),
             y = list(type = "int", dim = "[N]", value = y))
-parameters = list(beta = list(type = "vector", dim = "k"))
-transformed.parameters = list(z = list(type = "vector", dim = "N", expression = "z = X * beta;"))
+parameters = list(beta = list(type = "vector", dim = "[k]"))
+transformed.parameters = list(z = list(type = "vector", dim = "[N]", expression = "z = X * beta;"))
 model = list(priors = "beta ~ normal(0, 10);",
              likelihood = "y ~ bernoulli(Phi(z));")
 
 ikde.model = define.model(data, parameters, model, transformed.parameters = transformed.parameters)
 ikde.model = build.model(ikde.model)
+
+stan.fit = fit.model(ikde.model)
+stan.extract = extract(stan.fit)
+apply(stan.extract$beta, 2, mean)
+
+
+m = glm(y ~ 0 + X, binomial(link = "probit"))
+summary(m)
